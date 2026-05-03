@@ -1,0 +1,39 @@
+# node
+node_modules/
+*.log
+npm-debug.log*
+
+# Next.js
+.next/
+out/
+build/
+dist/
+.tsbuildinfo
+*.tsbuildinfo
+
+# Python
+__pycache__/
+*.pyc
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# SQLite WAL/SHM/journal — runtime-only.
+# data.db itself IS committed (deployment ships with it).
+*.db-shm
+*.db-wal
+*.db-journal
+
+# IDE / OS
+.DS_Store
+.vscode/
+.idea/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# Vercel
+.vercel

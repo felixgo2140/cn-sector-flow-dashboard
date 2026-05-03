@@ -1,0 +1,2 @@
+akshare>=1.18.58
+pandas>=2.0

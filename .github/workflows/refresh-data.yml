@@ -1,0 +1,40 @@
+name: refresh-data
+
+# A 股每日 15:00 (UTC+8) 收盘 = 07:00 UTC；09:00 UTC 触发以等待数据上传完毕。
+on:
+  schedule:
+    - cron: "0 9 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Python deps
+        run: pip install -r ingest/requirements.txt
+
+      - name: Pull data
+        run: make pull
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add web/db/data.db
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "chore(data): refresh $(date -u +%Y-%m-%d)"
+            git push
+          fi
